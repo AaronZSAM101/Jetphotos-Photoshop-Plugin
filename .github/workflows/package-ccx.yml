@@ -1,0 +1,57 @@
+name: Package CCX
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  package:
+    name: Build CCX package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read manifest version
+        id: manifest
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create CCX archive
+        run: |
+          rm -f com.aviation-photo-viewer.photo-check-tools_PS.ccx
+          zip -r com.aviation-photo-viewer.photo-check-tools_PS.ccx \
+            icons \
+            index.html \
+            main.js \
+            manifest.json \
+            README.md \
+            styles.css
+
+      - name: Upload CCX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: com.aviation-photo-viewer.photo-check-tools_PS.ccx
+          path: com.aviation-photo-viewer.photo-check-tools_PS.ccx
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.manifest.outputs.version }}
+          CCX_FILE: com.aviation-photo-viewer.photo-check-tools_PS.ccx
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release edit "$VERSION" --title "$VERSION"
+          else
+            gh release create "$VERSION" --target "$GITHUB_SHA" --title "$VERSION" --notes "Release $VERSION"
+          fi
+
+          gh release upload "$VERSION" "$CCX_FILE" --clobber

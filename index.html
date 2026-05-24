@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <main>
+    <div class="toolbar">
+      <button id="equalize" title="检查污点">污点</button>
+      <button id="center-grid" title="居中网格">居中</button>
+      <button id="fine-grid" title="地平线 / 细网格">地平</button>
+    </div>
+
+    <section id="stage">
+      <div id="empty"></div>
+      <img id="preview" alt="">
+      <svg id="center-overlay" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="23.14" y1="0" x2="23.14" y2="100"/>
+          <line x1="76.86" y1="0" x2="76.86" y2="100"/>
+          <line x1="0" y1="28.04" x2="100" y2="28.04"/>
+          <line x1="0" y1="71.96" x2="100" y2="71.96"/>
+          <line x1="23.14" y1="50.00" x2="76.86" y2="50.00"/>
+          <line x1="50.00" y1="28.04" x2="50.00" y2="71.96"/>
+        </g>
+      </svg>
+      <div id="fine-overlay"></div>
+    </section>
+
+    <p id="status">Ready</p>
+  </main>
+</body>
+</html>
