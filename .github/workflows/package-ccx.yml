@@ -9,7 +9,7 @@ on:
 
 jobs:
   package:
-    name: Build CCX package
+    name: Build packages
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -35,6 +35,20 @@ jobs:
             README.md \
             styles.css
 
+      - name: Create manual install archive
+        env:
+          VERSION: ${{ steps.manifest.outputs.version }}
+        run: |
+          ZIP_FILE="com.aviation-photo-viewer.photo-check-tools_${VERSION}.zip"
+          rm -f "$ZIP_FILE"
+          zip -r "$ZIP_FILE" \
+            icons \
+            index.html \
+            main.js \
+            manifest.json \
+            README.md \
+            styles.css
+
       - name: Upload CCX artifact
         uses: actions/upload-artifact@v4
         with:
@@ -42,11 +56,19 @@ jobs:
           path: com.aviation-photo-viewer.photo-check-tools_PS.ccx
           if-no-files-found: error
 
+      - name: Upload manual install artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: com.aviation-photo-viewer.photo-check-tools_${{ steps.manifest.outputs.version }}.zip
+          path: com.aviation-photo-viewer.photo-check-tools_${{ steps.manifest.outputs.version }}.zip
+          if-no-files-found: error
+
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.manifest.outputs.version }}
           CCX_FILE: com.aviation-photo-viewer.photo-check-tools_PS.ccx
+          ZIP_FILE: com.aviation-photo-viewer.photo-check-tools_${{ steps.manifest.outputs.version }}.zip
         run: |
           if gh release view "$VERSION" >/dev/null 2>&1; then
             gh release edit "$VERSION" --title "$VERSION"
@@ -55,3 +77,4 @@ jobs:
           fi
 
           gh release upload "$VERSION" "$CCX_FILE" --clobber
+          gh release upload "$VERSION" "$ZIP_FILE" --clobber
