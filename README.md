@@ -8,7 +8,7 @@ It brings viewer-style inspection tools into Photoshop so you can review a photo
 
 它把查看器中的照片检查工具带入 Photoshop，方便你在导出或投稿前检查照片。
 
-©️ Photo credit by @Liyushen1217
+©️ Photo credit by @Yushen1217
 <img width="3420" height="2006" alt="3774feb6d6a1255582cc052cf3ffd413" src="https://github.com/user-attachments/assets/da66c4b2-ad0e-4c35-8aff-e8d00f2f25ad" />
 
 <img width="1019" height="681" alt="96249584643c7df751aeb77e8db45e21" src="https://github.com/user-attachments/assets/85023173-bcf5-4fb1-a4c6-7bafa19c0979" />
